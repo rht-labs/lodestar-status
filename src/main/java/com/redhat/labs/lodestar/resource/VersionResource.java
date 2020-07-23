@@ -9,12 +9,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import com.redhat.labs.lodestar.config.VersionManifestConfig;
-import com.redhat.labs.lodestar.model.version.Version;
 import com.redhat.labs.lodestar.model.version.VersionManifest;
 
 @RequestScoped
@@ -23,22 +21,8 @@ import com.redhat.labs.lodestar.model.version.VersionManifest;
 @Consumes(MediaType.APPLICATION_JSON)
 public class VersionResource {
 
-    @ConfigProperty(name = "git.commit")
-    String gitCommit;
-    
-    @ConfigProperty(name = "git.tag")
-    String gitTag;
-
     @Inject
     VersionManifestConfig versionManifestConfig;
-
-    @GET
-    @PermitAll
-    @Timed(name = "versionResourceTimer")
-    @Counted(name = "versionResourceCounter")
-    public Version getStatusVersion() {
-        return Version.builder().gitCommit(gitCommit).gitTag(gitTag).build();
-    }
 
     @GET
     @PermitAll

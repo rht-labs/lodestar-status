@@ -50,6 +50,7 @@ public class VersionManifestConfig {
 
                     ObjectMapper om = new ObjectMapper(new YAMLFactory());
                     versionData = om.readValue(fileContents, VersionManifest.class);
+                    LOGGER.debug("setting main version key {}", mainVersionKey);
                     versionData.setMainVersionKey(mainVersionKey);
                     LOGGER.debug(versionData.toString());
                 } catch (IOException e) {

@@ -23,17 +23,4 @@ public class VersionResourceTest {
              .body(is(expected));
     }
 
-    @Test
-    public void testValidResourceVersion() {
-
-        String expected = ResourceLoader.load("data/version/get-version.json");
-
-        given()
-        .when()
-            .get("/api/v1/version")
-        .then()
-            .statusCode(200)
-            .body(is(expected));
-    }   
-
 }
