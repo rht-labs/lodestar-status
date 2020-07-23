@@ -48,7 +48,7 @@ STATUS_GIT_TAG - the Git tag of the status-service that is deployed
 
 ### VERSION MANIFEST SCHEMA
 
-The version manifest will be stored in a ConfigMap or in GitLab.  The format is in Yaml and will contain a list of applications, each containing the name of the application and its associated version.  Below is an example:
+The version manifest will be stored in a ConfigMap.  The format is in Yaml and will contain a list of applications, each containing the name of the application and its associated version.  Below is an example:
 
 ```
 applications:
