@@ -60,7 +60,8 @@ public class VersionManifestSerdesTest {
         String actual = jsonb.toJson(vm);
 
         // then
-        System.out.print(actual);
+        String expected = ResourceLoader.load("data/version/get-version-manifest.json");
+        assertEquals(expected, actual);
 
     }
 
