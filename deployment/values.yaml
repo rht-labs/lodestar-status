@@ -1,0 +1,12 @@
+name: lodestar-status
+
+servicePort: 8080
+
+imageName: "quay.io/rht-labs/lodestar-status"
+imageTag: "latest" # This is intended to be overridden by the parent Helm chart.
+
+mongodb:
+  persistent: true
+  version: 3.6
+
+versions:
