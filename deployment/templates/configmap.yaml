@@ -5,7 +5,6 @@ data:
 {{- range $key, $value := .Values.versions}}
     - application: {{ $key }}
       version: {{ $value }}
-      linkAddress: https://github.com/rht-labs
 {{- end }}
 kind: ConfigMap
 metadata:
