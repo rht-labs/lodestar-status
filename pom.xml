@@ -20,6 +20,11 @@
 		<quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
 		<surefire-plugin.version>2.22.1</surefire-plugin.version>
 		<lombok.version>1.18.12</lombok.version>
+		<sonar.projectKey>rht-labs_lodestar-status</sonar.projectKey>
+		<sonar.organization>rht-labs</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
+		<jacoco.version>0.8.5</jacoco.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -97,6 +102,27 @@
 						<maven.home>${maven.home}</maven.home>
 					</systemPropertyVariables>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>jacoco-initialize</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<phase>test-compile</phase>
+					</execution>
+					<execution>
+						<id>jacoco-site</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -15,6 +15,7 @@ public class Version {
 
     private String application;
     private String version;
+    private String linkAddress;
     private String gitCommit;
     private String gitTag;
 
