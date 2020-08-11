@@ -83,9 +83,9 @@ public class StatusService {
                 return Optional.empty();
             }
 
-        } catch (WebApplicationException wae) {
+        } catch (Exception e) {
 
-            LOGGER.warn("call to component {} endpoint failed with message {}", component, wae.getMessage());
+            LOGGER.warn("call to component {} endpoint failed with message {}", component, e.getMessage());
             // rest call failed, assuming service is not responding
             return Optional.empty();
 
