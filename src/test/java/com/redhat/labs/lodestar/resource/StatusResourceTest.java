@@ -1,15 +1,7 @@
 package com.redhat.labs.lodestar.resource;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import javax.ws.rs.WebApplicationException;
 
@@ -17,15 +9,13 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.redhat.labs.lodestar.model.status.response.HealthStatus;
+import com.redhat.labs.lodestar.model.HealthStatus;
 import com.redhat.labs.lodestar.rest.client.BackendClient;
 import com.redhat.labs.lodestar.rest.client.FrontendClient;
 import com.redhat.labs.lodestar.rest.client.GitApiClient;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
 
 @QuarkusTest
 public class StatusResourceTest {

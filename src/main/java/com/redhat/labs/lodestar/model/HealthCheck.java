@@ -1,4 +1,4 @@
-package com.redhat.labs.lodestar.model.status.response;
+package com.redhat.labs.lodestar.model;
 
 import java.util.HashMap;
 import java.util.Map;

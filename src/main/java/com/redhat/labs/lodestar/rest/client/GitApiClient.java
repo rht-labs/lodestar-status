@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import com.redhat.labs.lodestar.model.status.response.HealthStatus;
+import com.redhat.labs.lodestar.model.HealthStatus;
 
 @ApplicationScoped
 @RegisterRestClient(configKey = "lodestar.git.api")
