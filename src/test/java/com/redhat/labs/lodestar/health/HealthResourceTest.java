@@ -12,7 +12,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.redhat.labs.lodestar.model.HealthStatus;
+import com.redhat.labs.lodestar.model.Health;
 import com.redhat.labs.lodestar.rest.client.BackendClient;
 import com.redhat.labs.lodestar.rest.client.FrontendClient;
 import com.redhat.labs.lodestar.rest.client.GitApiClient;
@@ -40,9 +40,9 @@ public class HealthResourceTest {
     void testStatusHealthUp() {
 
         // given
-        Mockito.when(backendClient.getBackendStatus()).thenReturn(HealthStatus.builder().status("UP").build());
+        Mockito.when(backendClient.getBackendStatus()).thenReturn(Health.builder().status("UP").build());
         Mockito.when(frontendClient.getFrontendStatus()).thenReturn(Response.ok().build());
-        Mockito.when(gitApiClient.getGitApiStatus()).thenReturn(HealthStatus.builder().status("UP").build());
+        Mockito.when(gitApiClient.getGitApiStatus()).thenReturn(Health.builder().status("UP").build());
         
 
         given()
@@ -77,9 +77,9 @@ public class HealthResourceTest {
     void testStatusHealthDown() {
 
         // given
-        Mockito.when(backendClient.getBackendStatus()).thenReturn(HealthStatus.builder().status("DOWN").build());
+        Mockito.when(backendClient.getBackendStatus()).thenReturn(Health.builder().status("DOWN").build());
         Mockito.when(frontendClient.getFrontendStatus()).thenReturn(Response.ok().build());
-        Mockito.when(gitApiClient.getGitApiStatus()).thenReturn(HealthStatus.builder().status("UP").build());
+        Mockito.when(gitApiClient.getGitApiStatus()).thenReturn(Health.builder().status("UP").build());
         
 
         given()

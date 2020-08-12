@@ -12,7 +12,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.redhat.labs.lodestar.model.HealthStatus;
+import com.redhat.labs.lodestar.model.Health;
 import com.redhat.labs.lodestar.rest.client.GitApiClient;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -33,7 +33,7 @@ public class GitApiReadinessCheckTest {
     void testGitApiReadinessCheckUp() {
 
         // given
-        Mockito.when(client.getGitApiStatus()).thenReturn(HealthStatus.builder().status("UP").build());
+        Mockito.when(client.getGitApiStatus()).thenReturn(Health.builder().status("UP").build());
 
         // when
         HealthCheckResponse response = check.call();
@@ -50,7 +50,7 @@ public class GitApiReadinessCheckTest {
     void testGitApiReadinessCheckDown() {
 
         // given
-        Mockito.when(client.getGitApiStatus()).thenReturn(HealthStatus.builder().status("DOWN").build());
+        Mockito.when(client.getGitApiStatus()).thenReturn(Health.builder().status("DOWN").build());
 
         // when
         HealthCheckResponse response = check.call();

@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HealthStatus {
+public class Health {
 
     private String status;
     @Builder.Default
-    private List<HealthCheck> checks = new ArrayList();;
+    private List<Check> checks = new ArrayList();;
 
 }

@@ -10,7 +10,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.redhat.labs.lodestar.model.HealthStatus;
+import com.redhat.labs.lodestar.model.Health;
 import com.redhat.labs.lodestar.rest.client.BackendClient;
 
 @Readiness
@@ -30,7 +30,7 @@ public class BackendReadinessCheck implements HealthCheck {
 
         try {
 
-            HealthStatus status = client.getBackendStatus();
+            Health status = client.getBackendStatus();
             LOGGER.debug("backend readiness health response {}", status);
             return status.getStatus().equals("UP") ? HealthCheckResponse.up(BACKEND)
                     : HealthCheckResponse.down(BACKEND);

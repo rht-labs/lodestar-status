@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import com.redhat.labs.lodestar.model.HealthStatus;
+import com.redhat.labs.lodestar.model.Health;
 
 @ApplicationScoped
 @RegisterRestClient(configKey = "lodestar.backend.api")
@@ -14,6 +14,6 @@ public interface BackendClient {
 
     @GET
     @Path("/health/ready")
-    HealthStatus getBackendStatus();
+    Health getBackendStatus();
 
 }

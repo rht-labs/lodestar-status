@@ -10,7 +10,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.redhat.labs.lodestar.model.HealthStatus;
+import com.redhat.labs.lodestar.model.Health;
 import com.redhat.labs.lodestar.rest.client.GitApiClient;
 
 @Readiness
@@ -30,7 +30,7 @@ public class GitApiReadinessCheck implements HealthCheck {
 
         try {
 
-            HealthStatus status = client.getGitApiStatus();
+            Health status = client.getGitApiStatus();
             LOGGER.debug("git api readiness health response {}", status);
             return status.getStatus().equals("UP") ? HealthCheckResponse.up(GIT_API)
                     : HealthCheckResponse.down(GIT_API);
