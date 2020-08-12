@@ -13,7 +13,7 @@ import com.redhat.labs.lodestar.model.Health;
 public interface GitApiClient {
 
     @GET
-    @Path("/health")
+    @Path("/health/ready")
     Health getGitApiStatus();
 
 }
