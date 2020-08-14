@@ -20,6 +20,7 @@ import io.fabric8.kubernetes.api.model.ReplicationControllerStatus;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
+import lombok.Getter;
 
 @ApplicationScoped
 public class KubernetesApiClient {
@@ -33,6 +34,7 @@ public class KubernetesApiClient {
     @Inject
     KubernetesClient client;
 
+    @Getter
     Map<String, ReplicationControllerStatus> componentStatusMap;
 
     void onStart(@Observes StartupEvent event) {
@@ -52,7 +54,7 @@ public class KubernetesApiClient {
         return Optional.ofNullable(componentStatusMap.get(name));
     }
 
-    @Scheduled(every = "15s", delay = 30, delayUnit = TimeUnit.SECONDS)
+    @Scheduled(every = "10s", delay = 30, delayUnit = TimeUnit.SECONDS)
     void refreshComponentStatusMap() {
 
         if(!componentNamespaces.isEmpty()) {
