@@ -40,7 +40,7 @@ public class StatusReadinessCheckTest {
 
         // then
         assertNotNull(response);
-        assertEquals("STATUS", response.getName());
+        assertEquals("STATUS READINESS", response.getName());
         assertNotNull(response.getState());
         assertEquals("DOWN", response.getState().name());
 
@@ -57,7 +57,7 @@ public class StatusReadinessCheckTest {
 
         // then
         assertNotNull(response);
-        assertEquals("STATUS", response.getName());
+        assertEquals("STATUS READINESS", response.getName());
         assertNotNull(response.getState());
         assertEquals("DOWN", response.getState().name());
 
@@ -76,7 +76,7 @@ public class StatusReadinessCheckTest {
 
         // then
         assertNotNull(response);
-        assertEquals("STATUS", response.getName());
+        assertEquals("STATUS READINESS", response.getName());
         assertNotNull(response.getState());
         assertEquals("DOWN", response.getState().name());
 
@@ -95,7 +95,7 @@ public class StatusReadinessCheckTest {
 
         // then
         assertNotNull(response);
-        assertEquals("STATUS", response.getName());
+        assertEquals("STATUS READINESS", response.getName());
         assertNotNull(response.getState());
         assertEquals("UP", response.getState().name());
 
