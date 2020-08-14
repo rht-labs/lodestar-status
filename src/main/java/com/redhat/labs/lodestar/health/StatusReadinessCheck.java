@@ -2,10 +2,12 @@ package com.redhat.labs.lodestar.health;
 
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Readiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,8 @@ import com.redhat.labs.lodestar.config.VersionManifestConfig;
 import com.redhat.labs.lodestar.model.version.Version;
 import com.redhat.labs.lodestar.model.version.VersionManifest;
 
+@Readiness
+@ApplicationScoped
 public class StatusReadinessCheck implements HealthCheck {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatusReadinessCheck.class);
