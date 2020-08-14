@@ -21,7 +21,7 @@ public class StatusReadinessCheck implements HealthCheck {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatusReadinessCheck.class);
 
-    private static final String STATUS_READINESS = "STATUS";
+    private static final String STATUS_READINESS = "STATUS READINESS";
 
     @Inject
     VersionManifestConfig vmConfig;
