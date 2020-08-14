@@ -1,11 +1,9 @@
 package com.redhat.labs.lodestar.health;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.Readiness;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.redhat.labs.lodestar.model.Health;
 import com.redhat.labs.lodestar.rest.client.GitApiClient;
 
-@Readiness
-@ApplicationScoped
 public class GitApiReadinessCheck implements HealthCheck {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GitApiReadinessCheck.class);

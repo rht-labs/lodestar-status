@@ -18,83 +18,83 @@ import com.redhat.labs.lodestar.rest.client.FrontendClient;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 
-@QuarkusTest
+//@QuarkusTest
 public class FrontendReadinessCheckTest {
 
-    @Inject
-    @Readiness
-    FrontendReadinessCheck check;
-
-    @InjectMock
-    @RestClient
-    FrontendClient client;
-
-    @Test
-    void testFrontendReadinessCheckUp() {
-
-        // given
-        Mockito.when(client.getFrontendStatus()).thenReturn(Response.ok().build());
-
-        // when
-        HealthCheckResponse response = check.call();
-
-        // then
-        assertNotNull(response);
-        assertEquals("FRONTEND", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("UP", response.getState().name());
-
-    }
-
-    @Test
-    void testFrontendReadinessCheckDown() {
-
-        // given
-        Mockito.when(client.getFrontendStatus()).thenReturn(Response.serverError().build());
-
-        // when
-        HealthCheckResponse response = check.call();
-
-        // then
-        assertNotNull(response);
-        assertEquals("FRONTEND", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("DOWN", response.getState().name());
-
-    }
-
-    @Test
-    void testFrontendReadinessCheckWebApplicationException() {
-
-        // given
-        Mockito.when(client.getFrontendStatus()).thenThrow(new WebApplicationException(500));
-
-        // when
-        HealthCheckResponse response = check.call();
-
-        // then
-        assertNotNull(response);
-        assertEquals("FRONTEND", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("DOWN", response.getState().name());
-
-    }
-
-    @Test
-    void testFrontendReadinessCheckRuntimeException() {
-
-        // given
-        Mockito.when(client.getFrontendStatus()).thenThrow(new RuntimeException("uh oh"));
-
-        // when
-        HealthCheckResponse response = check.call();
-
-        // then
-        assertNotNull(response);
-        assertEquals("FRONTEND", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("DOWN", response.getState().name());
-
-    }
+//    @Inject
+//    @Readiness
+//    FrontendReadinessCheck check;
+//
+//    @InjectMock
+//    @RestClient
+//    FrontendClient client;
+//
+//    @Test
+//    void testFrontendReadinessCheckUp() {
+//
+//        // given
+//        Mockito.when(client.getFrontendStatus()).thenReturn(Response.ok().build());
+//
+//        // when
+//        HealthCheckResponse response = check.call();
+//
+//        // then
+//        assertNotNull(response);
+//        assertEquals("FRONTEND", response.getName());
+//        assertNotNull(response.getState());
+//        assertEquals("UP", response.getState().name());
+//
+//    }
+//
+//    @Test
+//    void testFrontendReadinessCheckDown() {
+//
+//        // given
+//        Mockito.when(client.getFrontendStatus()).thenReturn(Response.serverError().build());
+//
+//        // when
+//        HealthCheckResponse response = check.call();
+//
+//        // then
+//        assertNotNull(response);
+//        assertEquals("FRONTEND", response.getName());
+//        assertNotNull(response.getState());
+//        assertEquals("DOWN", response.getState().name());
+//
+//    }
+//
+//    @Test
+//    void testFrontendReadinessCheckWebApplicationException() {
+//
+//        // given
+//        Mockito.when(client.getFrontendStatus()).thenThrow(new WebApplicationException(500));
+//
+//        // when
+//        HealthCheckResponse response = check.call();
+//
+//        // then
+//        assertNotNull(response);
+//        assertEquals("FRONTEND", response.getName());
+//        assertNotNull(response.getState());
+//        assertEquals("DOWN", response.getState().name());
+//
+//    }
+//
+//    @Test
+//    void testFrontendReadinessCheckRuntimeException() {
+//
+//        // given
+//        Mockito.when(client.getFrontendStatus()).thenThrow(new RuntimeException("uh oh"));
+//
+//        // when
+//        HealthCheckResponse response = check.call();
+//
+//        // then
+//        assertNotNull(response);
+//        assertEquals("FRONTEND", response.getName());
+//        assertNotNull(response.getState());
+//        assertEquals("DOWN", response.getState().name());
+//
+//    }
 
 }
