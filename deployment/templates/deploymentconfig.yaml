@@ -30,6 +30,27 @@ spec:
       - env:
         - name: LODESTAR_STATUS_GIT_TAG
           value: {{ .Values.imageTag }}
+        envFrom:
+        - configMapRef:
+            name: status-configuration
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+            scheme: HTTP
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+            scheme: HTTP
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
         image: {{ .Values.name }}:{{ .Values.imageTag }}
         imagePullPolicy: Always
         name: {{ .Values.name }}
@@ -47,6 +68,8 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      serviceAccountName: lodestar-status
+      serviceAccount: lodestar-status
       volumes:
         - configMap:
             defaultMode: 420

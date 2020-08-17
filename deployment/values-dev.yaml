@@ -18,3 +18,5 @@ versions:
   componentTwo: v23.9
   componentThree: v1.2
   lodestar: v5.1
+
+namespaces: false

@@ -1,0 +1,8 @@
+{{- if and .Values.development .Values.namespaces }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: status-configuration
+data:
+  LODESTAR_COMPONENT_NAMESPACES: {{ .Values.namespaces }}
+{{- end }}
