@@ -8,6 +8,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.redhat.labs.lodestar.k8s.client.KubernetesApiClient;
 import com.redhat.labs.lodestar.model.Check;
@@ -20,6 +22,8 @@ import lombok.Setter;
 @ApplicationScoped
 public class ComponentHealthService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentHealthService.class);
+    
     private final static String UP = "UP";
     private final static String DOWN = "DOWN";
     private static final String CURRENT_REPLICAS = "Current Replicas";
@@ -43,8 +47,12 @@ public class ComponentHealthService {
         // get checks
         List<Check> checks = getChecks();
 
+        LOGGER.debug("found checks {}", checks);
+
         // find overall status
         String status = getOverallStatus(checks);
+
+        LOGGER.debug("determined overall status {}", status);
 
         return Health.builder().status(status).checks(checks).build();
 
@@ -59,6 +67,8 @@ public class ComponentHealthService {
     private List<Check> getChecks() {
 
         Map<String, ReplicationControllerStatus> statusMap = client.getComponentStatusMap();
+
+        LOGGER.debug("using status map to create list of checks {}", statusMap);
 
         // get checks
         return
@@ -102,6 +112,7 @@ public class ComponentHealthService {
 
         for(Check check : checks) {
             if(DOWN.equals(check.getStatus())) {
+                LOGGER.debug("check found DOWN status {}", check);
                 return DOWN;
             }
         }

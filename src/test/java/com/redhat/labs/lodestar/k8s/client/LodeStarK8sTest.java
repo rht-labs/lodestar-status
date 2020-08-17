@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
-
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
 import io.fabric8.kubernetes.api.model.ReplicationController;

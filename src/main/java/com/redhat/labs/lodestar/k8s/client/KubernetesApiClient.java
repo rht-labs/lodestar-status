@@ -1,6 +1,7 @@
 package com.redhat.labs.lodestar.k8s.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,6 +77,7 @@ public class KubernetesApiClient {
     void loadComponentStatus() {
 
         List<ReplicationController> rcList = getAllReplicationControllers();
+        LOGGER.debug("replication controller list is {}", rcList);
 
         componentStatusMap =
                 rcList
@@ -123,7 +125,15 @@ public class KubernetesApiClient {
      * @return
      */
     List<ReplicationController> getReplicaControllerByNamespace(String namespace) {
-        return client.replicationControllers().inNamespace(namespace).list().getItems();
+        
+        try {
+            LOGGER.debug("using k8s client to retrieve replication controllers in namespace {}", namespace);
+            return client.replicationControllers().inNamespace(namespace).list().getItems();
+        } catch(Exception e) {
+            LOGGER.error("failed to get successful response from k8s api for namespace {}, exception message: {}", namespace, e.getMessage());
+            return Arrays.asList();
+        }
+
     }
 
 }
