@@ -3,8 +3,6 @@ package com.redhat.labs.lodestar.k8s.client;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -21,6 +19,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
 import lombok.Getter;
+import lombok.Setter;
 
 @ApplicationScoped
 public class KubernetesApiClient {
@@ -28,8 +27,13 @@ public class KubernetesApiClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(KubernetesApiClient.class);
     private static final String NOT_SET = "not.set";
 
-    @ConfigProperty(name = "component.namespaces")
+    @Setter
+    @ConfigProperty(name = "component.namespaces", defaultValue = NOT_SET)
     List<String> componentNamespaces;
+
+    @Setter
+    @ConfigProperty(name = "component.names", defaultValue = NOT_SET)
+    List<String> componentNames;
 
     @Inject
     KubernetesClient client;
@@ -39,31 +43,36 @@ public class KubernetesApiClient {
 
     void onStart(@Observes StartupEvent event) {
 
+        // initialize if namespaces not defined
         if(componentNamespaces.size() == 1 && componentNamespaces.get(0).equals(NOT_SET)) {
             componentNamespaces = new ArrayList<>();
         }
 
         LOGGER.debug("configured component namespaces {}", componentNamespaces);
 
-        loadComponentStatus();
-        LOGGER.debug("initial loaded component statuses: {}", componentStatusMap);
-
-    }
-
-    public Optional<ReplicationControllerStatus> getReplicationControllerStatusByName(String name) {
-        return Optional.ofNullable(componentStatusMap.get(name));
-    }
-
-    @Scheduled(every = "10s", delay = 30, delayUnit = TimeUnit.SECONDS)
-    void refreshComponentStatusMap() {
-
-        if(!componentNamespaces.isEmpty()) {
-            LOGGER.debug("refreshing component status data");
-            loadComponentStatus();
+        // iniitalize if component names not set
+        if(componentNames.size() == 1 && componentNames.get(0).equals(NOT_SET)) {
+            componentNames = new ArrayList<>();
         }
 
+        LOGGER.debug("Configured component names {}", componentNames);
+
     }
 
+    /**
+     * Periodically updates the {@link Map} containing the {@link ReplicationController}
+     * name - {@link ReplicationControllerStatus} pairs.
+     */
+    @Scheduled(every = "10s")
+    void refreshComponentStatusMap() {
+            loadComponentStatus();
+    }
+
+    /**
+     * Retrieves all {@link ReplicationController} in the configured namespaces
+     * and creates a {@link Map} using the {@link ReplicationController} name as 
+     * the key and the {@link ReplicationControllerStatus} as the value.
+     */
     void loadComponentStatus() {
 
         List<ReplicationController> rcList = getAllReplicationControllers();
@@ -71,15 +80,28 @@ public class KubernetesApiClient {
         componentStatusMap =
                 rcList
                     .stream()
+                    .map(rc -> {
+                        final String name = rc.getMetadata().getName().substring(0, rc.getMetadata().getName().lastIndexOf("-"));
+                        rc.getMetadata().setName(name);
+                        return rc;
+                    })
+                    .filter(rc -> (componentNames.size() == 0 || componentNames.contains(rc.getMetadata().getName())))
                     .filter(rc -> rc.getStatus().getReplicas() != null && rc.getStatus().getReadyReplicas() != null)
                     .collect(
                             Collectors.toMap(
-                                    rc -> rc.getMetadata().getName().substring(0, rc.getMetadata().getName().lastIndexOf("-")),
+                                    rc -> rc.getMetadata().getName(),
                                     rc -> rc.getStatus()
                                     ));
 
     }
 
+    /**
+     * Returns a {@link List} of all {@link ReplicationController} found for 
+     * all namespaces in the configured {@link List}.  An empty {@link List}
+     * is returned if no namespaces are configured.
+     * 
+     * @return
+     */
     List<ReplicationController> getAllReplicationControllers() {
 
         return
@@ -93,10 +115,15 @@ public class KubernetesApiClient {
 
     }
 
+    /**
+     * Returns a {@link List} of all {@link ReplicationController} found for the 
+     * given namespace.
+     * 
+     * @param namespace
+     * @return
+     */
     List<ReplicationController> getReplicaControllerByNamespace(String namespace) {
         return client.replicationControllers().inNamespace(namespace).list().getItems();
     }
-
-
 
 }
