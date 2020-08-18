@@ -1,4 +1,4 @@
-{{- if and .Values.development .Values.namespaces }}
+{{- if .Values.namespaces }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
