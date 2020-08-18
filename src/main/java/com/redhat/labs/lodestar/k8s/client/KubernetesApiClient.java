@@ -77,7 +77,7 @@ public class KubernetesApiClient {
     void loadComponentStatus() {
 
         List<ReplicationController> rcList = getAllReplicationControllers();
-        LOGGER.debug("replication controller list is {}", rcList);
+        LOGGER.trace("replication controller list is {}", rcList);
 
         componentStatusMap =
                 rcList
@@ -127,7 +127,7 @@ public class KubernetesApiClient {
     List<ReplicationController> getReplicaControllerByNamespace(String namespace) {
         
         try {
-            LOGGER.debug("using k8s client to retrieve replication controllers in namespace {}", namespace);
+            LOGGER.trace("using k8s client to retrieve replication controllers in namespace {}", namespace);
             return client.replicationControllers().inNamespace(namespace).list().getItems();
         } catch(Exception e) {
             LOGGER.error("failed to get successful response from k8s api for namespace {}, exception message: {}", namespace, e.getMessage());

@@ -47,12 +47,12 @@ public class ComponentHealthService {
         // get checks
         List<Check> checks = getChecks();
 
-        LOGGER.debug("found checks {}", checks);
+        LOGGER.trace("found checks {}", checks);
 
         // find overall status
         String status = getOverallStatus(checks);
 
-        LOGGER.debug("determined overall status {}", status);
+        LOGGER.trace("determined overall status {}", status);
 
         return Health.builder().status(status).checks(checks).build();
 
@@ -68,7 +68,7 @@ public class ComponentHealthService {
 
         Map<String, ReplicationControllerStatus> statusMap = client.getComponentStatusMap();
 
-        LOGGER.debug("using status map to create list of checks {}", statusMap);
+        LOGGER.trace("using status map to create list of checks {}", statusMap);
 
         // get checks
         return
@@ -112,7 +112,7 @@ public class ComponentHealthService {
 
         for(Check check : checks) {
             if(DOWN.equals(check.getStatus())) {
-                LOGGER.debug("check found DOWN status {}", check);
+                LOGGER.trace("check found DOWN status {}", check);
                 return DOWN;
             }
         }
