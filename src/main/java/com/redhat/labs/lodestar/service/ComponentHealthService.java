@@ -78,14 +78,18 @@ public class ComponentHealthService {
 
     }
 
+    /**
+     * Periodically reloads the {@link Health} for all components.
+     * 
+     */
     @Scheduled(every = "10s")
     void checkComponentHealth() {
-
+        getComponentHealth();
     }
 
     /**
      * Creates a {@link Health} report using all {@link Check} found using the
-     * {@link KubernetesApiClientOld}
+     * {@link OpenShiftApiClient}.
      * 
      */
     public void getComponentHealth() {
