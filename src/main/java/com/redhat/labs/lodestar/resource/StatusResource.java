@@ -29,7 +29,7 @@ public class StatusResource {
     @Timed(name = "statusResourceTimer")
     @Counted(name = "statusResourceCounter")
     public Health getComponentHealth() {
-        return service.getComponentHealth();
+        return service.getHealth();
     }
 
 }

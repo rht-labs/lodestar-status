@@ -1,23 +1,21 @@
 package com.redhat.labs.lodestar.service;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import com.redhat.labs.lodestar.k8s.client.LodeStarK8sTest;
 import com.redhat.labs.lodestar.model.Health;
+import com.redhat.labs.lodestar.ocp.client.LodeStarOpenShiftTest;
 
-import io.fabric8.kubernetes.api.model.ReplicationController;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.openshift.api.model.DeploymentConfig;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-public class ComponentHealthServiceTest extends LodeStarK8sTest {
+public class ComponentHealthServiceTest extends LodeStarOpenShiftTest {
 
     @Inject
     ComponentHealthService service;
@@ -26,104 +24,130 @@ public class ComponentHealthServiceTest extends LodeStarK8sTest {
     void testAllComponentsUp() {
 
         // given
-        final ReplicationController rc1 = mockReplicationController("component1-2", 2, 2);
-        final ReplicationController rc2 = mockReplicationController("component2-4", 1, 1);
-        final ReplicationController rc3 = mockReplicationController("component3-1", 1, 2);
+        final Deployment d1 = mockDeployment("component1", 1, 1, "True");
+        final Deployment d2 = mockDeployment("component2", 1, 1, "True");
 
-        setupMockServerWithReplicationControllerApi("n1", Arrays.asList(rc1, rc2));
-        setupMockServerWithReplicationControllerApi("n2", Arrays.asList(rc3));
+        final DeploymentConfig dc1 = mockDeploymentConfig("component3", 1, 1, "True");
+        final DeploymentConfig dc2 = mockDeploymentConfig("component4", 2, 2, "True");
 
-        setComponentNamesAndNamespaces(Arrays.asList(), Arrays.asList("n1", "n2"));
+        setupMockServer("n1", Arrays.asList(d1,d2), Arrays.asList());
+        setupMockServer("n2", Arrays.asList(), Arrays.asList(dc1, dc2));
 
-        loadComponentStatus();
+        service.setComponentNames(Arrays.asList());
+        service.setComponentNamespaces(Arrays.asList("n1", "n2"));
+
+        service.getComponentHealth();
 
         // when
-        Health health = service.getComponentHealth();
+        Health health = service.getHealth();
 
         // then
-        assertNotNull(health);
-        assertEquals("UP", health.getStatus());
+        Assert.assertNotNull(health);
+        Assert.assertEquals("UP", health.getStatus());
 
-        assertNotNull(health.getChecks());
-        assertEquals(3, health.getChecks().size());
+        Assert.assertNotNull(health.getChecks());
+        Assert.assertEquals(4, health.getChecks().size());
 
         health.getChecks().stream().forEach(check -> {
             if(check.getStatus().equals("DOWN")) {
-                fail("expected check value to be UP for check" + check.getName());
+                Assert.fail("expected check value to be UP for check" + check.getName());
             }
         });
 
     }
 
     @Test
-    void testOneComponentsDown() {
+    void testAllComponentsUpSubsetOfComponents() {
 
         // given
-        final ReplicationController rc1 = mockReplicationController("component1-2", 2, 2);
-        final ReplicationController rc2 = mockReplicationController("component2-4", 1, 1);
-        final ReplicationController rc3 = mockReplicationController("component3-1", 0, 2);
+        final Deployment d1 = mockDeployment("component1", 1, 1, "True");
+        final Deployment d2 = mockDeployment("component2", 1, 1, "True");
 
-        setupMockServerWithReplicationControllerApi("n1", Arrays.asList(rc1, rc2));
-        setupMockServerWithReplicationControllerApi("n2", Arrays.asList(rc3));
+        final DeploymentConfig dc1 = mockDeploymentConfig("component3", 1, 1, "True");
+        final DeploymentConfig dc2 = mockDeploymentConfig("component4", 2, 2, "True");
 
-        setComponentNamesAndNamespaces(Arrays.asList(), Arrays.asList("n1", "n2"));
+        setupMockServer("n1", Arrays.asList(d1,d2), Arrays.asList());
+        setupMockServer("n2", Arrays.asList(), Arrays.asList(dc1, dc2));
 
-        loadComponentStatus();
+        service.setComponentNames(Arrays.asList("component1", "component4"));
+        service.setComponentNamespaces(Arrays.asList("n1", "n2"));
+
+        service.getComponentHealth();
 
         // when
-        Health health = service.getComponentHealth();
+        Health health = service.getHealth();
 
         // then
-        assertNotNull(health);
-        assertEquals("DOWN", health.getStatus());
+        Assert.assertNotNull(health);
+        Assert.assertEquals("UP", health.getStatus());
 
-        assertNotNull(health.getChecks());
-        assertEquals(3, health.getChecks().size());
+        Assert.assertNotNull(health.getChecks());
+        Assert.assertEquals(2, health.getChecks().size());
 
         health.getChecks().stream().forEach(check -> {
-            if(check.getName().equals("component3") && check.getStatus().equals("UP")) {
-                fail("expected check value to be DOWN for check " + check);
-            } else if(!check.getName().equals("component3") && check.getStatus().equals("DOWN")) {
-                fail("expected check value to be UP for check" + check);
+            if(check.getStatus().equals("DOWN")) {
+                Assert.fail("expected check value to be UP for check" + check.getName());
+            }
+            if("component2".equals(check.getName()) || "component3".equals(check.getName())) {
+                Assert.fail(check.getName() + " should have been filtered out.");
             }
         });
 
     }
 
     @Test
-    void testOneComponentsDownThresholdNotMet() {
+    void testOneComponentDown() {
 
         // given
-        final ReplicationController rc1 = mockReplicationController("component1-2", 2, 2);
-        final ReplicationController rc2 = mockReplicationController("component2-4", 2, 2);
-        final ReplicationController rc3 = mockReplicationController("component3-1", 1, 2);
+        final Deployment d1 = mockDeployment("component1", 1, 1, "True");
+        final Deployment d2 = mockDeployment("component2", 1, 1, "True");
 
-        setupMockServerWithReplicationControllerApi("n1", Arrays.asList(rc1, rc2));
-        setupMockServerWithReplicationControllerApi("n2", Arrays.asList(rc3));
+        final DeploymentConfig dc1 = mockDeploymentConfig("component3", 1, 1, "False");
+        final DeploymentConfig dc2 = mockDeploymentConfig("component4", 2, 2, "True");
 
-        setComponentNamesAndNamespaces(Arrays.asList(), Arrays.asList("n1", "n2"));
+        setupMockServer("n1", Arrays.asList(d1,d2), Arrays.asList());
+        setupMockServer("n2", Arrays.asList(), Arrays.asList(dc1, dc2));
 
-        service.setReplicaThreshold(2);
+        service.setComponentNames(Arrays.asList());
+        service.setComponentNamespaces(Arrays.asList("n1", "n2"));
 
-        loadComponentStatus();
+        service.getComponentHealth();
 
         // when
-        Health health = service.getComponentHealth();
+        Health health = service.getHealth();
 
         // then
-        assertNotNull(health);
-        assertEquals("DOWN", health.getStatus());
+        Assert. assertNotNull(health);
+        Assert. assertEquals("DOWN", health.getStatus());
 
-        assertNotNull(health.getChecks());
-        assertEquals(3, health.getChecks().size());
+        Assert.assertNotNull(health.getChecks());
+        Assert.assertEquals(4, health.getChecks().size());
 
         health.getChecks().stream().forEach(check -> {
             if(check.getName().equals("component3") && check.getStatus().equals("UP")) {
-                fail("expected check value to be DOWN for check " + check);
+                Assert.fail("expected check value to be DOWN for check " + check);
             } else if(!check.getName().equals("component3") && check.getStatus().equals("DOWN")) {
-                fail("expected check value to be UP for check" + check);
+                Assert.fail("expected check value to be UP for check" + check);
             }
         });
+
+    }
+
+    @Test
+    void testGetHealthNoNamespacesConfigured() {
+
+        // given
+        service.setComponentNames(Arrays.asList());
+        service.setComponentNamespaces(Arrays.asList());
+
+        service.getComponentHealth();
+
+        // when
+        Health health = service.getHealth();
+
+        // then
+        Assert.assertNotNull(health);
+        Assert.assertEquals(0, health.getChecks().size());
 
     }
 

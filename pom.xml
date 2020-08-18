@@ -51,8 +51,8 @@
             <artifactId>quarkus-rest-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-kubernetes-client</artifactId>
+            <groupId>io.fabric8</groupId>
+            <artifactId>openshift-client</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
