@@ -133,7 +133,7 @@ public class ComponentHealthService {
 
         return componentNamespaces.stream()
                 .flatMap(namespace -> client.getDeploymentsByNamespace(namespace).stream())
-                .filter(deployment -> (componentNames.size() == 0
+                .filter(deployment -> (componentNames.isEmpty()
                         || componentNames.contains(deployment.getMetadata().getName())))
                 .map(deployment -> convertDeploymentToCheck(deployment));
 
@@ -165,7 +165,7 @@ public class ComponentHealthService {
 
         return componentNamespaces.stream()
                 .flatMap(namespace -> client.getDeploymentConfigsByNamespace(namespace).stream())
-                .filter(deploymentConfig -> (componentNames.size() == 0
+                .filter(deploymentConfig -> (componentNames.isEmpty()
                         || componentNames.contains(deploymentConfig.getMetadata().getName())))
                 .map(deployment -> convertDeploymentConfigToCheck(deployment));
 

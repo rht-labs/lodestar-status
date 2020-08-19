@@ -86,6 +86,15 @@ Descriptions:
 
 See [the deployment README](deployment/README.md) for details on how to spin up a deployment for developing on OpenShift.
 
+### Development Application Port
+
+Please note the when running application locally on your computer using the `dev` profile, the default port it set to `8082`.  This is to prevent port conflicts with the other LodeStar applications if all are running locally.
+
+Current Default Ports:
+- `Git API` - 8080
+- `Backend` - 8081
+- `Status`  - 8082
+
 ### Running the Application 
 
 You can run your application using Quarkus using:
