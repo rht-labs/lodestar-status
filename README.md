@@ -80,7 +80,7 @@ applications:
 Descriptions:
 
 - `LODESTAR_COMPONENT_NAMESPACES` - comma separated list of namespaces containing components to report.  If not specified, no component status will be reported.
-- `LODESTAR_COMPONENT_NAMES` - comma separate list of components to include in the reporting.  If not specified, all components in configured namespaces will be  included in the status report.
+- `LODESTAR_COMPONENT_NAMES` - comma separated list of components to include in the reporting.  If not specified, all components in configured namespaces will be  included in the status report.
 
 ## Development
 
