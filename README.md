@@ -49,10 +49,10 @@ Sensitive fields like the gitlab token and cluster credentials should be stored 
 
 Descriptions:
 
-LODESTAR_STATUS_VERSIONS_PATH - the path to the file containing the version manifest data
-VERSION_APP_KEY - the key/name of the main application found in the version manifest data
-STATUS_GIT_COMMIT - the Git commit of the status-service that is deployed
-STATUS_GIT_TAG - the Git tag of the status-service that is deployed
+- `LODESTAR_STATUS_VERSIONS_PATH` - the path to the file containing the version manifest data
+- `VERSION_APP_KEY` - the key/name of the main application found in the version manifest data
+- `STATUS_GIT_COMMIT` - the Git commit of the status-service that is deployed
+- `STATUS_GIT_TAG` - the Git tag of the status-service that is deployed
 
 ### VERSION MANIFEST SCHEMA
 
@@ -79,8 +79,8 @@ applications:
 
 Descriptions:
 
-LODESTAR_COMPONENT_NAMESPACES - comma separated list of namespaces containing components to report.  If not specified, no component status will be reported.
-LODESTAR_COMPONENT_NAMES - comma separate list of components to include in the reporting.  If not specified, all components in configured namespaces will be included in the status report.
+- `LODESTAR_COMPONENT_NAMESPACES` - comma separated list of namespaces containing components to report.  If not specified, no component status will be reported.
+- `LODESTAR_COMPONENT_NAMES` - comma separate list of components to include in the reporting.  If not specified, all components in configured namespaces will be  included in the status report.
 
 ## Development
 
