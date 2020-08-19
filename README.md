@@ -18,6 +18,14 @@ The version manifest resource exposes an API that allows clients to retrieve the
 GET /api/v1/version/manifest
 ```
 
+### Status Resoure
+
+The status resource exposes an API that allows clients to retrieve the current status of each LodeStar component.  This process uses the OpenShift/Kubernetes APIs to determine the availability of the components using the associated status of their `deployments` or `deploymentconfigs`.
+
+```
+GET /api/v1/status
+```
+
 ## Configuration
 
 The preferred place to store non-sensitive data is in the application.properties.
@@ -41,10 +49,10 @@ Sensitive fields like the gitlab token and cluster credentials should be stored 
 
 Descriptions:
 
-LODESTAR_STATUS_VERSIONS_PATH - the path to the file containing the version manifest data
-VERSION_APP_KEY - the key/name of the main application found in the version manifest data
-STATUS_GIT_COMMIT - the Git commit of the status-service that is deployed
-STATUS_GIT_TAG - the Git tag of the status-service that is deployed
+- `LODESTAR_STATUS_VERSIONS_PATH` - the path to the file containing the version manifest data
+- `VERSION_APP_KEY` - the key/name of the main application found in the version manifest data
+- `STATUS_GIT_COMMIT` - the Git commit of the status-service that is deployed
+- `STATUS_GIT_TAG` - the Git tag of the status-service that is deployed
 
 ### VERSION MANIFEST SCHEMA
 
@@ -62,9 +70,30 @@ applications:
   version: v5.1
 ```
 
+### STATUS
+
+| Name | Example Value | Required |
+|------|---------------|----------|
+| LODESTAR_COMPONENT_NAMESPACES | my-namespace1,my-namespace-2 | False |
+| LODESTAR_COMPONENT_NAMES | my-component | False |
+
+Descriptions:
+
+- `LODESTAR_COMPONENT_NAMESPACES` - comma separated list of namespaces containing components to report.  If not specified, no component status will be reported.
+- `LODESTAR_COMPONENT_NAMES` - comma separated list of components to include in the reporting.  If not specified, all components in configured namespaces will be  included in the status report.
+
 ## Development
 
 See [the deployment README](deployment/README.md) for details on how to spin up a deployment for developing on OpenShift.
+
+### Development Application Port
+
+Please note the when running application locally on your computer using the `dev` profile, the default port it set to `8082`.  This is to prevent port conflicts with the other LodeStar applications if all are running locally.
+
+Current Default Ports:
+- `Git API` - 8080
+- `Backend` - 8081
+- `Status`  - 8082
 
 ### Running the Application 
 

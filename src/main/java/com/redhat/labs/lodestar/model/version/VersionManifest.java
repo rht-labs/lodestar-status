@@ -2,6 +2,7 @@ package com.redhat.labs.lodestar.model.version;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.json.bind.annotation.JsonbProperty;
@@ -27,7 +28,9 @@ public class VersionManifest {
 
     @JsonbProperty("main_version")
     public Version getMainVersion() {
-        return applications.stream().filter(a -> a.getApplication().equalsIgnoreCase(mainVersionKey)).findFirst().get();
+        Optional<Version> optional = applications.stream()
+                .filter(a -> a.getApplication().equalsIgnoreCase(mainVersionKey)).findFirst();
+        return optional.isPresent() ? optional.get() : null;
     }
 
     @JsonbProperty("component_versions")
