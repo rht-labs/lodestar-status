@@ -31,6 +31,7 @@ helm template . \
   --values values-dev.yaml \
   --set git.uri=https://github.com/rht-labs/lodestar-status.git \
   --set git.ref=master \
+  --set namespaces=<your-namespaces>
 | oc apply -f -
 ```
 
@@ -40,6 +41,7 @@ It accepts the following variables
 |---|---|
 | `git.uri`  | The HTTPS reference to the repo (your fork!) to build  |
 | `git.ref`  | The branch name to build  |
+| `namespaces` | Comma separated list of namespaces where components are found |
 
 This will spin up all of the usual resources that this service needs in production, plus a `BuildConfig` configured to build it from source from the Git repository specified. To trigger this build, use `oc start-build lodestar-status`.
 

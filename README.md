@@ -18,6 +18,14 @@ The version manifest resource exposes an API that allows clients to retrieve the
 GET /api/v1/version/manifest
 ```
 
+### Status Resoure
+
+The status resource exposes an API that allows clients to retrieve the current status of each LodeStar component.  This process uses the OpenShift/Kubernetes APIs to determine the availability of the components using the associated status of their `deployments` or `deploymentconfigs`.
+
+```
+GET /api/v1/status
+```
+
 ## Configuration
 
 The preferred place to store non-sensitive data is in the application.properties.
@@ -61,6 +69,18 @@ applications:
 - application: lodestar
   version: v5.1
 ```
+
+### STATUS
+
+| Name | Example Value | Required |
+|------|---------------|----------|
+| LODESTAR_COMPONENT_NAMESPACES | my-namespace1,my-namespace-2 | False |
+| LODESTAR_COMPONENT_NAMES | my-component | False |
+
+Descriptions:
+
+LODESTAR_COMPONENT_NAMESPACES - comma separated list of namespaces containing components to report.  If not specified, no component status will be reported.
+LODESTAR_COMPONENT_NAMES - comma separate list of components to include in the reporting.  If not specified, all components in configured namespaces will be included in the status report.
 
 ## Development
 
