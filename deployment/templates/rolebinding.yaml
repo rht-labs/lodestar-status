@@ -14,5 +14,5 @@ subjects:
 - kind: ServiceAccount
   name: lodestar-status
 {{- if not .Values.development }}
-  namespace: {{ .Values.deploymentNamespace }}
+  namespace: {{ .Release.Namespace }}
 {{- end }}
