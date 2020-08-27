@@ -5,6 +5,9 @@
     <div class="masthead">
       <div class="text-container">
         <span class="font-largest">Lodestar Status</span>
+        <div class="button cta">
+          <a :href="appLink">Go to LodeStar</a>
+        </div>
       </div>
     </div>
     <div class="content">
@@ -40,6 +43,8 @@
   var app = new Vue({
     el: "#status-app",
     data: {
+      // TODO: Get this from a config
+      appLink: "https://test.lodestar.rht-labs.com",
       message: "Hello, Vue!",
       statuses: [{ message: "hello" }],
       statusService: statusService({ baseUrl: "hello" }),
@@ -53,7 +58,6 @@
   function statusService({ baseUrl }) {
     return {
       getStatuses: async function () {
-        // TODO: Implement actual status service call
         return [
           {
             system: "Git API",
@@ -67,14 +71,6 @@
     };
   }
 </script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Red+Hat+Text&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Red+Hat+Display&family=Red+Hat+Text&display=swap"
-  rel="stylesheet"
-/>
 <link
   href="https://fonts.googleapis.com/css2?family=Overpass&display=swap"
   rel="stylesheet"
@@ -129,5 +125,18 @@
   }
   .status-container:last-child {
     border-bottom-width: 1px;
+  }
+  .button.cta {
+    background-color: #C00;
+    color: white !important;
+    padding: 0.85rem 0.95rem;
+    cursor: pointer;
+    float: right;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  .button.cta a {
+    text-decoration: none;
+    color: white;
   }
 </style>
