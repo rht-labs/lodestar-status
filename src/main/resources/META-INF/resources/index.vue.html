@@ -11,29 +11,37 @@
       </div>
     </div>
     <div class="content">
-      <status-report :status="status" v-for="status in statuses" />
+      <status-report
+        key="lodestar system"
+        name="Lodestar"
+        :status="statuses.status"
+      ></status-report>
+      <status-report
+        :status="check.status"
+        :name="check.name"
+        :key="check.name"
+        v-for="check in statuses.checks"
+      ></status-report>
     </div>
   </div>
 </html>
 
 <script type="text/x-template" id="status-template">
   <div class="status-container">
-    <p>{{ status.system }} <span :style="{ float: 'right' , color: statusColor[1]}">{{status.message}}</span></p>
+    <p>{{ name }} <span :style="{ float: 'right' , color: statusColor[1]}">{{status}}</span></p>
   </div>
 </script>
 <script>
   Vue.component("status-report", {
-    props: ["status"],
+    props: ["name", "status"],
     template: "#status-template",
     computed: {
       statusColor: function () {
-        switch (this.status.status) {
-          case "healthy":
+        switch (this.status) {
+          case "UP":
             return ["#1E4F18", "#3E8635"];
-          case "degraded":
+          case "DOWN":
             return ["#A30000", "#C9190B"];
-          case "warning":
-            return ["#795600", "#F0AB00"];
           default:
             return ["grey", "grey"];
         }
@@ -43,11 +51,9 @@
   var app = new Vue({
     el: "#status-app",
     data: {
-      // TODO: Get this from a config
-      appLink: "https://test.lodestar.rht-labs.com",
-      message: "Hello, Vue!",
-      statuses: [{ message: "hello" }],
-      statusService: statusService({ baseUrl: "hello" }),
+      appLink: "https://lodestar.rht-labs.com",
+      statuses: [],
+      statusService: statusService(),
     },
     mounted: async function () {
       statuses = await this.statusService.getStatuses();
@@ -55,18 +61,12 @@
     },
   });
 
-  function statusService({ baseUrl }) {
+  function statusService() {
     return {
       getStatuses: async function () {
-        return [
-          {
-            system: "Git API",
-            message: "Operational",
-            status: "healthy",
-          },
-          { message: "Down", status: "degraded", system: "Frontend" },
-          { message: "Unreachable", status: "warning", system: "Dispatcher" },
-        ];
+        const url = "/api/v1/status";
+        const data = await fetch(url).then((response) => response.json());
+        return data;
       },
     };
   }
@@ -82,11 +82,16 @@
     margin: 0;
   }
   .masthead {
-    background-image: url("https://access.redhat.com/chrome_themes/nimbus/img/nimbus-hero_support.jpg");
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.67),
+        rgba(1, 1, 1, 0)
+      ),
+      url("ls-status.jpg");
     height: 315px;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
+    background-position: center 30%;
     max-width: 100%;
     margin: 0 auto;
     position: relative;
@@ -127,7 +132,7 @@
     border-bottom-width: 1px;
   }
   .button.cta {
-    background-color: #C00;
+    background-color: #c00;
     color: white !important;
     padding: 0.85rem 0.95rem;
     cursor: pointer;
