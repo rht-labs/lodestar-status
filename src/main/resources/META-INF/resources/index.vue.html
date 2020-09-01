@@ -56,8 +56,7 @@
       statusService: statusService(),
     },
     mounted: async function () {
-      statuses = await this.statusService.getStatuses();
-      this.statuses = statuses;
+      this.statuses = await this.statusService.getStatuses();
     },
   });
 
