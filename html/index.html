@@ -6,71 +6,25 @@
       <div class="text-container">
         <span class="font-largest">Lodestar Status</span>
         <div class="button cta">
-          <a :href="appLink">Go to LodeStar</a>
+          <a href="appLink">Go to LodeStar</a>
         </div>
       </div>
     </div>
     <div class="content">
-      <status-report :status="status" v-for="status in statuses" />
+      {#for status in statuses}
+      <div class="status-container">
+        <p>
+          { status.system }
+          <span style="float: right; color: green;">
+            { status.message }
+          </span>
+        </p>
+      </div>
+      {/for}
     </div>
   </div>
 </html>
 
-<script type="text/x-template" id="status-template">
-  <div class="status-container">
-    <p>{{ status.system }} <span :style="{ float: 'right' , color: statusColor[1]}">{{status.message}}</span></p>
-  </div>
-</script>
-<script>
-  Vue.component("status-report", {
-    props: ["status"],
-    template: "#status-template",
-    computed: {
-      statusColor: function () {
-        switch (this.status.status) {
-          case "healthy":
-            return ["#1E4F18", "#3E8635"];
-          case "degraded":
-            return ["#A30000", "#C9190B"];
-          case "warning":
-            return ["#795600", "#F0AB00"];
-          default:
-            return ["grey", "grey"];
-        }
-      },
-    },
-  });
-  var app = new Vue({
-    el: "#status-app",
-    data: {
-      // TODO: Get this from a config
-      appLink: "https://test.lodestar.rht-labs.com",
-      message: "Hello, Vue!",
-      statuses: [{ message: "hello" }],
-      statusService: statusService({ baseUrl: "hello" }),
-    },
-    mounted: async function () {
-      statuses = await this.statusService.getStatuses();
-      this.statuses = statuses;
-    },
-  });
-
-  function statusService({ baseUrl }) {
-    return {
-      getStatuses: async function () {
-        return [
-          {
-            system: "Git API",
-            message: "Operational",
-            status: "healthy",
-          },
-          { message: "Down", status: "degraded", system: "Frontend" },
-          { message: "Unreachable", status: "warning", system: "Dispatcher" },
-        ];
-      },
-    };
-  }
-</script>
 <link
   href="https://fonts.googleapis.com/css2?family=Overpass&display=swap"
   rel="stylesheet"
@@ -127,7 +81,7 @@
     border-bottom-width: 1px;
   }
   .button.cta {
-    background-color: #C00;
+    background-color: #c00;
     color: white !important;
     padding: 0.85rem 0.95rem;
     cursor: pointer;
