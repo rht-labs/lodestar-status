@@ -9,6 +9,6 @@ mongodb:
   persistent: true
   version: 3.6
 
-namespaces: omp-frontend
+namespaces: lodestar-frontend
 
 versions:
