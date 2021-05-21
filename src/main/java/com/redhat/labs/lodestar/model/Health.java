@@ -16,6 +16,6 @@ public class Health {
 
     private String status;
     @Builder.Default
-    private List<Check> checks = new ArrayList();;
+    private List<Check> checks = new ArrayList();
 
 }
