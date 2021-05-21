@@ -16,6 +16,7 @@ public class Check {
 
     private String name;
     private String status;
+    private String version;
     @Builder.Default
     private Map<String, Object> data = new HashMap<>();
 

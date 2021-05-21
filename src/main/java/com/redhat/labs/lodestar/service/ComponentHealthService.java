@@ -15,6 +15,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.redhat.labs.lodestar.config.VersionManifestConfig;
 import com.redhat.labs.lodestar.model.Check;
 import com.redhat.labs.lodestar.model.Health;
 import com.redhat.labs.lodestar.ocp.client.OpenShiftApiClient;
@@ -51,6 +52,9 @@ public class ComponentHealthService {
 
     @Inject
     OpenShiftApiClient client;
+    
+    @Inject
+    VersionManifestConfig versionManifestConfig;
 
     @Getter
     Health health;
@@ -120,7 +124,8 @@ public class ComponentHealthService {
         Stream<Check> deploymentChecks = getChecksForDeployments();
         Stream<Check> deploymentConfigChecks = getChecksForDeploymentConfigs();
 
-        return Stream.concat(deploymentChecks, deploymentConfigChecks).collect(Collectors.toList());
+        return Stream.concat(deploymentChecks, deploymentConfigChecks).sorted((ch1, ch2) -> ch1.getName().compareTo(ch2.getName()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -233,7 +238,7 @@ public class ComponentHealthService {
         LOGGER.info("creating check for {}", name);
         return Check.builder().name(name).status(available ? UP : DOWN)
                 .data(Map.of(CURRENT_REPLICAS, currentReplicas == null ? 0 : currentReplicas, DESIRED_REPLICAS,
-                        desiredReplicas == null ? 0 : desiredReplicas))
+                        desiredReplicas == null ? 0 : desiredReplicas)).version(versionManifestConfig.getComponentVersion(name))
                 .build();
     }
 

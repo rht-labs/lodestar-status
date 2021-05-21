@@ -67,8 +67,9 @@ public class StatusReadinessCheckTest {
     void testStatusReadinessCheckDownComponentVersionEmpty() {
 
         // given
-        VersionManifest vm = new VersionManifest("lodestar",
-                Arrays.asList(Version.builder().application("lodestar").build()));
+        VersionManifest vm = VersionManifest.builder().mainVersionKey("lodestar")
+                .applications(Arrays.asList(Version.builder().application("lodestar").build()))
+                .build();
         Mockito.when(config.getVersionData()).thenReturn(vm);
 
         // when
@@ -86,8 +87,9 @@ public class StatusReadinessCheckTest {
     void testStatusReadinessCheckUp() {
 
         // given
-        VersionManifest vm = new VersionManifest("lodestar", Arrays.asList(
-                Version.builder().application("lodestar").build(), Version.builder().application("another").build()));
+        VersionManifest vm = VersionManifest.builder().mainVersionKey("lodestar")
+                .applications(Arrays.asList(Version.builder().application("lodestar").build(), Version.builder().application("another").build()))
+                .build();
         Mockito.when(config.getVersionData()).thenReturn(vm);
 
         // when

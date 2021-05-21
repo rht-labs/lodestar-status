@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.redhat.labs.lodestar.model.version.Version;
 import com.redhat.labs.lodestar.model.version.VersionManifest;
 
 import io.quarkus.runtime.StartupEvent;
@@ -32,6 +35,8 @@ public class VersionManifestConfig {
 
     private VersionManifest versionData = new VersionManifest();
     private long lastModifiedTime;
+    
+    private Map<String, String> applicationMap = new HashMap<>();
 
     void onStart(@Observes StartupEvent event) {
         loadVersionData();
@@ -53,6 +58,7 @@ public class VersionManifestConfig {
                     LOGGER.debug("setting main version key {}", mainVersionKey);
                     versionData.setMainVersionKey(mainVersionKey);
                     LOGGER.debug(versionData.toString());
+                    updateMap();
                 } catch (IOException e) {
                     LOGGER.error(String.format("Found but unable to read file %s", versionJsonFile), e);
                 }
@@ -69,6 +75,17 @@ public class VersionManifestConfig {
      */
     public VersionManifest getVersionData() {
         return versionData;
+    }
+    
+    public String getComponentVersion(String componentName) {
+        return applicationMap.containsKey(componentName) ? applicationMap.get(componentName) : "";
+    }
+    
+    private void updateMap() {
+        applicationMap.clear();
+        for(Version app : versionData.getApplications()) {
+    	    applicationMap.put(app.getApplication(), app.getVersion());
+        }
     }
 
     private boolean isModified(Path file) {

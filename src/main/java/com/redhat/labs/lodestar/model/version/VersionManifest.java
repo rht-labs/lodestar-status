@@ -24,7 +24,7 @@ public class VersionManifest {
 
     @JsonbTransient
     @Builder.Default
-    private List<Version> applications = new ArrayList<>();;
+    private List<Version> applications = new ArrayList<>();
 
     @JsonbProperty("main_version")
     public Version getMainVersion() {
