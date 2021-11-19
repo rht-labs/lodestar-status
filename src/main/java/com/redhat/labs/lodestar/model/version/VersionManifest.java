@@ -28,9 +28,13 @@ public class VersionManifest {
 
     @JsonbProperty("main_version")
     public Version getMainVersion() {
+        return getVersion(mainVersionKey);
+    }
+
+    public Version getVersion(String component) {
         Optional<Version> optional = applications.stream()
-                .filter(a -> a.getApplication().equalsIgnoreCase(mainVersionKey)).findFirst();
-        return optional.isPresent() ? optional.get() : null;
+                .filter(a -> a.getApplication().equalsIgnoreCase(component)).findFirst();
+        return optional.orElse(new Version());
     }
 
     @JsonbProperty("component_versions")

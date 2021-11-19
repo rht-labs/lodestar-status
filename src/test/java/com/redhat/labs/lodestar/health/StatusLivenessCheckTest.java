@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-public class StatusLIvenessCheckTest {
+public class StatusLivenessCheckTest {
 
     @Inject
     @Liveness
@@ -26,8 +26,8 @@ public class StatusLIvenessCheckTest {
 
         assertNotNull(response);
         assertEquals("STATUS LIVENESS", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("UP", response.getState().name());
+        assertNotNull(response.getStatus());
+        assertEquals("UP", response.getStatus().name());
 
     }
 

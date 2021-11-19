@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -41,8 +42,8 @@ public class StatusReadinessCheckTest {
         // then
         assertNotNull(response);
         assertEquals("STATUS READINESS", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("DOWN", response.getState().name());
+        assertNotNull(response.getStatus());
+        assertEquals("DOWN", response.getStatus().name());
 
     }
 
@@ -58,8 +59,8 @@ public class StatusReadinessCheckTest {
         // then
         assertNotNull(response);
         assertEquals("STATUS READINESS", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("DOWN", response.getState().name());
+        assertNotNull(response.getStatus());
+        assertEquals("DOWN", response.getStatus().name());
 
     }
 
@@ -68,7 +69,7 @@ public class StatusReadinessCheckTest {
 
         // given
         VersionManifest vm = VersionManifest.builder().mainVersionKey("lodestar")
-                .applications(Arrays.asList(Version.builder().application("lodestar").build()))
+                .applications(List.of(Version.builder().application("lodestar").build()))
                 .build();
         Mockito.when(config.getVersionData()).thenReturn(vm);
 
@@ -78,8 +79,8 @@ public class StatusReadinessCheckTest {
         // then
         assertNotNull(response);
         assertEquals("STATUS READINESS", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("DOWN", response.getState().name());
+        assertNotNull(response.getStatus());
+        assertEquals("DOWN", response.getStatus().name());
 
     }
 
@@ -98,8 +99,8 @@ public class StatusReadinessCheckTest {
         // then
         assertNotNull(response);
         assertEquals("STATUS READINESS", response.getName());
-        assertNotNull(response.getState());
-        assertEquals("UP", response.getState().name());
+        assertNotNull(response.getStatus());
+        assertEquals("UP", response.getStatus().name());
 
     }
 
